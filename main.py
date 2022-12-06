@@ -1,4 +1,3 @@
-import math
 import random
 import matplotlib.pyplot as plt
 import scipy.stats
@@ -33,8 +32,9 @@ def repeat_game(repetition_number):
         y.append(total / repetition_number)
     return x, y
 
+
 if __name__ == '__main__':
-    repeat = 10
+    repeat = 100
     n_for_median = repeat
     r1 = 512
 
@@ -44,8 +44,6 @@ if __name__ == '__main__':
         if i % 100 == 0: print(i)
         x11, y11 = repeat_game(r1)
         y1 = np.vstack([y1, y11])
-
-    print(len(y11))
 
     percent1 = 5
     percent2 = 95
@@ -57,7 +55,7 @@ if __name__ == '__main__':
     ymean = np.mean(y1, axis=0)
     plt.plot(x11, y161, label=f"{percent1} percentile")
     plt.plot(x11, ymedian1, label="median")
-    # plt.plot(x11, ymean, label=f"mean for {repeat} trials")
+    #plt.plot(x11, ymean, label=f"mean for {repeat} trials")
     plt.plot(x11, y841, label=f"{percent2} percentile")
     # x21, y21 = repeat_game(r2)
     # y2 = np.array([y21])
@@ -87,10 +85,11 @@ if __name__ == '__main__':
 
     plt.xticks([x for x in expectedx if x % 5 == 0])
 
-    #plt.show()
+    plt.show()
     '''
     ima = expectedy-ymedian1
     plt.plot([i for i in range(1, 21)], ima[:20])
     plt.title(f"expected value - median for R = {r1}")
     plt.show()
     '''
+
