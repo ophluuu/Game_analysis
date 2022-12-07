@@ -33,7 +33,7 @@ def test_game(repetition):
 
 repeat = 100
 n_for_median = repeat
-r1 = 512
+r1 = 16
 
 x21, y21 = test_game(r1)
 y_1 = np.array([y21])
@@ -45,42 +45,45 @@ period_x1 = 10
 return_y1 = []
 for i in range(10000):
     total1 = 0
-    for j in range(512):
+    for j in range(r1):
         total1 += game(period_x1)
-    return_y1.append(math.log(total1 / 512))
+    return_y1.append(math.log(total1 / r1))
 
 plt.figure(1)
 ecf_x = np.sort(return_y1)
 ecf_y = np.arange(len(ecf_x)) / float(len(ecf_x))
 plt.plot(ecf_x, ecf_y, label='period = 10')
-plt.legend(loc="upper left")
 
 period_x2 = 15
 return_y2 = []
 for i in range(10000):
     total1 = 0
-    for j in range(512):
+    for j in range(r1):
         total1 += game(period_x2)
-    return_y2.append(math.log(total1 / 512))
+    return_y2.append(math.log(total1 / r1))
 
 ecf_x2 = np.sort(return_y2)
 ecf_y2 = np.arange(len(ecf_x2)) / float(len(ecf_x2))
 plt.plot(ecf_x2, ecf_y2, label='period = 15')
-plt.legend(loc="upper left")
 
 period_x3 = 20
 return_y3 = []
 for i in range(10000):
     total1 = 0
-    for j in range(512):
+    for j in range(r1):
         total1 += game(period_x3)
-    return_y3.append(math.log(total1 / 512))
+    return_y3.append(math.log(total1 / r1))
 
 ecf_x3 = np.sort(return_y3)
 ecf_y3 = np.arange(len(ecf_x3)) / float(len(ecf_x3))
 plt.plot(ecf_x3, ecf_y3, label='period = 20')
-plt.title('Empirical Cumulative Distribution for period = 10, 15, 20')
-plt.legend(loc="upper left")
-plt.xlabel("average payoff")
+plt.title('Empirical Cumulative Distribution for period = 10, 15, 20 when R=16')
+plt.legend(loc="lower right")
+plt.xlabel("ln(average payoff)")
 plt.ylabel("frequency")
+
+reference_line_1_x = [0, 10]
+reference_line_1_y = [1.0, 1.0]
+plt.plot(reference_line_1_x, reference_line_1_y, '--', color="black")
+
 plt.show()
