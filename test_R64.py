@@ -35,7 +35,8 @@ def test_game(repetition):
 
 repeat = 100
 n_for_median = repeat
-r1 = 64
+n = 7
+r1 = 2**(n-1)
 
 x21, y21 = test_game(r1)
 y_1 = np.array([y21])
@@ -43,7 +44,7 @@ for i in range(n_for_median):
     if i % 100 == 0: print(i, 'asd')
     x21, y21 = test_game(r1)
 
-period_x1 = 10
+period_x1 = n
 return_y1 = []
 for i in range(10000):
     total1 = 0
@@ -54,19 +55,19 @@ for i in range(10000):
 plt.figure(1)
 ecf_x1 = np.sort(return_y1)
 ecf_y1 = np.arange(len(ecf_x1)) / float(len(ecf_x1))
-plt.plot(ecf_x1, ecf_y1, label='10 period')
+plt.plot(ecf_x1, ecf_y1)
 plt.title(f'Empirical Cumulative Distribution for R={r1}, period = {period_x1}, replication = 10000')
 plt.xlabel("ln(average payoff)")
 plt.ylabel("frequency")
 
 plt.figure(2)
-plt.hist(return_y1, bins=100, label='10 period')
-plt.xlim(0,8)
+plt.hist(return_y1, bins=100)
+plt.xlim([0, 8])
 plt.title(f'Probability Density Function for R={r1}, period = {period_x1}, replication = 10000')
 plt.xlabel("ln(average payoff)")
 plt.ylabel("frequency")
 
-period_x2 = 15
+period_x2 = n+5
 return_y2 = []
 for i in range(10000):
     total1 = 0
@@ -83,13 +84,14 @@ plt.xlabel("ln(average payoff)")
 plt.ylabel("frequency")
 
 plt.figure(4)
-plt.hist(return_y2, bins=100, label='15 period')
-plt.xlim(0,8)
+plt.hist(return_y2, bins=100)
+plt.xlim([0, 8])
 plt.title(f'Probability Density Function for R={r1}, period = {period_x2}, replication = 10000')
 plt.xlabel("ln(average payoff)")
 plt.ylabel("frequency")
 
-period_x3 = 20
+
+period_x3 = n+10
 return_y3 = []
 for i in range(10000):
     total1 = 0
@@ -106,8 +108,8 @@ plt.xlabel("ln(average payoff)")
 plt.ylabel("frequency")
 
 plt.figure(6)
-plt.hist(return_y3, bins=100, label='20 period')
-plt.xlim(0,8)
+plt.hist(return_y3, bins=100)
+plt.xlim([0, 8])
 plt.title(f'Probability Density Function for R={r1}, period = {period_x3}, replication = 10000')
 plt.xlabel("ln(average payoff)")
 plt.ylabel("frequency")
