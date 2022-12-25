@@ -1,0 +1,29 @@
+library(ISLR)
+head(Smarket)
+
+Smarket$Direction=factor(Smarket$Direction)
+model_1=glm(Direction~Lag1+Lag2+Lag3+Lag4+Lag5+Volume,data=Smarket, family=binomial)
+summary(model_1)
+AIC(model_1)
+BIC(model_1)
+
+Smarket$predictions=predict(model_1, type="response")
+head(Smarket)
+Smarket$pred=ifelse(Smarket$predictions>0.5, "Up","Down")
+attach(Smarket)
+table(pred,Direction)
+mean(pred==Direction)
+
+sample_rows<-sample(nrow(Smarket), 0.75*nrow(Smarket))
+head(sample_rows)
+Smarket_train<-Smarket[sample_rows,]
+Smarket_test<-Smarket[-sample_rows,]
+
+model_2=glm(Direction~Lag1+Lag2+Lag3+Lag4+Lag5+Volume,data=Smarket_train, family=binomial)
+summary(model_2)
+
+Smarket_test$predictions=predict(model_2, newdata=Smarket_test, type="response")
+Smarket_test$pred=ifelse(Smarket_test$predictions>0.5, "Up","Down")
+attach(Smarket_test)
+table(pred,Direction)
+mean(pred==Direction)
