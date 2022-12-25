@@ -1,0 +1,61 @@
+library(tidyverse)
+library(dplyr)
+library(rsample)
+library(tidymodels)
+library(ISLR)
+library(Metrics)
+model_1=lm(Apps~., data=College)
+summary(model_1)
+set.seed(1)
+Sample_rows<-sample(nrow(College),0.75*nrow(College))
+College_train<-College[Sample_rows,]
+College_test<-College[-Sample_rows,]
+model_train=lm(Apps~.,data=College_train)
+summary(model_train)
+College_train$pred<-predict(model_train, College_train)
+College_test$pred<-predict(model_train, College_test)
+(mse_test=mse(College_test$pred,College_test$Apps))
+(rmse_test=rmse(College_test$pred,College_test$Apps))
+x_train=model.matrix(Apps~.,College_train)[,-1]
+y_train=College_train$Apps
+x_test=model.matrix(Apps~.,College_test)[,-1]
+y_test=College_test$Apps
+library(glmnet)
+set.seed(1)
+cv.out=cv.glmnet(x_train,y_train,alpha=0)
+plot(cv.out)
+bestlam =cv.out$lambda.min
+bestlam
+ridge.train=glmnet(x_train,y_train,alpha=1, lambda = bestlam)
+ridge.pred=predict (ridge.train, newx=x_test)
+MSE = mean((ridge.pred -y_test)^2)
+RMSE = sqrt(mean((ridge.pred -y_test)^2))
+print(MSE)
+print(RMSE)
+Coll_split = initial_split(College, prop=0.75)
+coll_train=training(Coll_split)
+coll_test=testing(Coll_split)
+nrow(coll_test)/nrow(College)
+nrow(coll_train)/nrow(College)
+tree_spec <- decision_tree() %>% 
+  set_engine("rpart") %>% 
+  set_mode("regression")
+train_model<- tree_spec %>%
+  fit(formula=Apps~., data=coll_train) 
+train_model
+nrow(coll_train)
+predictions=predict(train_model, new_data=coll_test)
+predictions_combined <- predictions %>% 
+  mutate(true_class = coll_test$Apps)
+predictions_combined
+head(predictions_combined)
+accuracy(predictions_combined, estimate=.pred, truth=true_class)
+attach(College)
+# Compute the mean absolute error using one single function
+# Calculate the squared differences
+squared_diffs <- (predictions_combined$.pred - predictions_combined$true_class)^2
+# Compute the MSE using the formula
+mse_manual <- (1 / nrow(predictions_combined) * sum(squared_diffs))
+mse_manual
+rmse_manual <- sqrt(1 / nrow(predictions_combined) * sum(squared_diffs))
+rmse_manual
